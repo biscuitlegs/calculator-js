@@ -1,26 +1,50 @@
-function add(a, b) {
-    return a + b;
+function operate(operation) {
+    let [operandA, operator, operandB] = operation;
+    
+    switch (true) {
+        case operator === "+":
+            return +operandA + +operandB;
+        case operator === "−":
+            return +operandA - +operandB;
+        case operator === "×":
+            return +operandA * +operandB;
+        case operator === "÷":
+            return +operandA / +operandB;
+    }
 }
 
-function subtract(a, b) {
-    return a - b;
+function evaluate(string, entireResult=0) {
+    let entireOperation = string.split(/([+−×÷])/g);
+
+    while (!isFinished(entireOperation)) {
+        let subOperation = entireOperation.splice(0, 3);
+        let subOperationResult = operate(subOperation);
+        entireResult += subOperationResult;
+
+        if (!isFinished(entireOperation)) {
+            unshiftSubResult(entireOperation, subOperationResult);
+            entireResult = 0;
+        }
+    }
+
+    return entireResult;
 }
 
-function multiply(a, b) {
-    return a * b;
+function isFinished(operation) {
+    return operation.length > 0 ? false : true;
 }
 
-function divide(a, b) {
-    return a / b;
+function unshiftSubResult(main, unshift) {
+    return main.unshift(unshift.toString());
 }
 
 const display = document.querySelector('.display');
-const NumericAndOperatorButtons = document.querySelectorAll('.operator, .numeric');
+const numericAndOperatorButtons = document.querySelectorAll('.operator, .numeric');
 const equalsButton = document.querySelector('.equals');
 const backspaceButton = document.querySelector('.backspace');
 const clearButton = document.querySelector('.clear');
 
-NumericAndOperatorButtons.forEach(button => button.addEventListener('click', (e) => {
+numericAndOperatorButtons.forEach(button => button.addEventListener('click', (e) => {
     display.textContent += e.target.textContent;
 }));
 
@@ -29,43 +53,9 @@ equalsButton.addEventListener('click', () => {
 });
 
 backspaceButton.addEventListener('click', () => {
-    display.textContent = display.textContent.slice(0, -1)
+    display.textContent = display.textContent.slice(0, -1);
 });
 
 clearButton.addEventListener('click', () => {
     display.textContent = '';
 });
-
-function evaluate(string) {
-    let stringArr = string.split(/([+−×÷])/g);
-    let total = 0;
-
-    while (stringArr.length > 0) {
-        let operation = stringArr.splice(0, 3);
-        total += operate(operation);
-
-        if (stringArr.length > 0) {
-            stringArr.unshift(operate(operation).toString());
-            total = 0;
-        }
-    }
-
-    return total;
-}
-
-function operate(arr) {
-    let [operandA, operator, operandB] = arr;
-    
-    switch (true) {
-        case operator === "+":
-            return add(+operandA, +operandB);
-        case operator === "−":
-            return subtract(+operandA, +operandB);
-        case operator === "×":
-            return multiply(+operandA, +operandB);
-        case operator === "÷":
-            return divide(+operandA, +operandB);
-    }
-}
-
-//console.log(evaluate("5+5"));
