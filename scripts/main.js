@@ -38,6 +38,14 @@ function unshiftSubResult(main, unshift) {
     return main.unshift(unshift.toString());
 }
 
+function clearDisplay() {
+    display.textContent = '';
+}
+
+function backspaceDisplay() {
+    display.textContent = display.textContent.slice(0, -1);
+}
+
 const display = document.querySelector('.display');
 const numericAndOperatorButtons = document.querySelectorAll('.operator, .numeric');
 const equalsButton = document.querySelector('.equals');
@@ -53,9 +61,38 @@ equalsButton.addEventListener('click', () => {
 });
 
 backspaceButton.addEventListener('click', () => {
-    display.textContent = display.textContent.slice(0, -1);
+    backspaceDisplay();
 });
 
 clearButton.addEventListener('click', () => {
-    display.textContent = '';
+    clearDisplay();
+});
+
+window.addEventListener('keydown', (e) => {
+    switch(true) {
+        case e.key.match(/\d/) ? true : false:
+            display.textContent += e.key;
+            break;
+        case e.key.match(/\+/) ? true : false:
+            display.textContent += "+";
+            break;
+        case e.key.match(/\-/) ? true : false:
+            display.textContent += "−";
+            break;
+        case e.key.match(/\*/) ? true : false:
+            display.textContent += "×";
+            break;
+        case e.key.match(/\//) ? true : false:
+            display.textContent += "÷";
+            break;
+        case e.key.match(/\./) ? true : false:
+            display.textContent += ".";
+            break;
+        case e.key.match(/(\=|Enter)/) ? true : false:
+            display.textContent = evaluate(display.textContent);
+            break;
+        case e.key.match(/Backspace/) ? true : false:
+            backspaceDisplay();
+            break;
+    }
 });
