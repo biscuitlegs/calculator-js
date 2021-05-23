@@ -36,7 +36,11 @@ function evaluate(string, entireResult=0) {
         }
     }
 
-    return entireResult;
+    if (Number.isInteger(entireResult)) {
+        return +entireResult;
+    } else {
+        return +entireResult.toFixed(3);
+    }
 }
 
 function isFinished(operation) {
@@ -82,6 +86,8 @@ clearButton.addEventListener('click', () => {
 });
 
 window.addEventListener('keydown', (e) => {
+    e.preventDefault();
+    
     switch(true) {
         case e.key.match(/\d/) ? true : false:
             display.textContent += e.key;
@@ -106,8 +112,6 @@ window.addEventListener('keydown', (e) => {
             break;
         case e.key.match(/Backspace/) ? true : false:
             backspaceDisplay();
-            break;
-        default:
             break;
     }
 });
