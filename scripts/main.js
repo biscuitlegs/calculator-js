@@ -19,14 +19,11 @@ function evaluate(string, entireResult=0) {
         return;
     }
 
-    let entireOperation = string.split(/([+−×÷])/g);
+    if (!string.match(/(\d[+−×÷]\d)+/ || string.match(/[^\d+−×÷]/))) {
+        return 'Error';
+    }
 
-    entireOperation.forEach(part => {
-        if (!part.match(/(^\d$|^\+$|^\−$|^\×$|^\÷$)/)) {
-            setDisplayError();
-            return;
-        }
-    });
+    let entireOperation = string.split(/([+−×÷])/g);
 
     while (!isFinished(entireOperation)) {
         let subOperation = entireOperation.splice(0, 3);
