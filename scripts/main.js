@@ -14,7 +14,19 @@ function operate(operation) {
 }
 
 function evaluate(string, entireResult=0) {
+    if (typeof string !== 'string') {
+        setDisplayError();
+        return;
+    }
+
     let entireOperation = string.split(/([+−×÷])/g);
+
+    entireOperation.forEach(part => {
+        if (!part.match(/(^\d$|^\+$|^\−$|^\×$|^\÷$)/)) {
+            setDisplayError();
+            return;
+        }
+    });
 
     while (!isFinished(entireOperation)) {
         let subOperation = entireOperation.splice(0, 3);
@@ -44,6 +56,10 @@ function clearDisplay() {
 
 function backspaceDisplay() {
     display.textContent = display.textContent.slice(0, -1);
+}
+
+function setDisplayError() {
+    display.textContent = 'Error';
 }
 
 const display = document.querySelector('.display');
@@ -93,6 +109,8 @@ window.addEventListener('keydown', (e) => {
             break;
         case e.key.match(/Backspace/) ? true : false:
             backspaceDisplay();
+            break;
+        default:
             break;
     }
 });
